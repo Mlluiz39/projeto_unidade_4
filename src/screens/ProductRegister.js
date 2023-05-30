@@ -33,6 +33,7 @@ export default function ProductRegister() {
     })
 
     navigation.navigate('Home')
+    }
 
     async function pickImage() {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -48,7 +49,6 @@ export default function ProductRegister() {
         setImage(result.assets[0].uri)
       }
     }
-  }
 
   return (
     <View style={styles.container}>
