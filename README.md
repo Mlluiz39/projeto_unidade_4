@@ -41,13 +41,13 @@ Siga as etapas abaixo para configurar o aplicativo:
 2. Navegue até o diretório do projeto e execute o comando `npm install` para instalar todas as dependências.
 3. Crie um arquivo `.env` na raiz do projeto e adicione as seguintes variáveis de ambiente:
 
-API_BASE_URL=<URL-da-API>
+    API_BASE_URL=<URL-da-API>
 
-CLOUDINARY_CLOUD_NAME=<seu-cloud-name>
+    CLOUDINARY_CLOUD_NAME=<seu-cloud-name>
 
-CLOUDINARY_API_KEY=<sua-api-key>
+    CLOUDINARY_API_KEY=<sua-api-key>
 
-CLOUDINARY_API_SECRET=<seu-api-secret>
+    CLOUDINARY_API_SECRET=<seu-api-secret>
 
 
 4. Configure o acesso ao banco de dados PostgreSQL no arquivo `config/db.js` fornecendo as informações de conexão corretas.
