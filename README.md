@@ -28,7 +28,7 @@ Antes de iniciar o aplicativo, certifique-se de ter o seguinte instalado em sua 
 - Node.js: versão 12 ou superior
 - Expo CLI: para instalar, execute o seguinte comando:
 
-npm install -g expo-cli
+  npm install -g expo-cli
 
 
 - Conta Cloudinary: crie uma conta no Cloudinary (https://cloudinary.com/) para obter as credenciais de acesso ao serviço.
@@ -42,8 +42,11 @@ Siga as etapas abaixo para configurar o aplicativo:
 3. Crie um arquivo `.env` na raiz do projeto e adicione as seguintes variáveis de ambiente:
 
 API_BASE_URL=<URL-da-API>
+
 CLOUDINARY_CLOUD_NAME=<seu-cloud-name>
+
 CLOUDINARY_API_KEY=<sua-api-key>
+
 CLOUDINARY_API_SECRET=<seu-api-secret>
 
 
