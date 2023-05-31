@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import api from '../services/api'
+import axios from 'axios'
 import { TextInput } from 'react-native-gesture-handler'
 
 export default function Home() {
@@ -9,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     async function loadProducts() {
-      const response = await api.get('/')
+      const response = await axios.get('http://localhost:3000/products')
       setProducts(response.data)
     }
     loadProducts()
@@ -34,7 +41,9 @@ export default function Home() {
         <Text style={{ fontSize: 16 }}>Controle de Estoque</Text>
 
         <TouchableOpacity onPress={handleNavigateToProductRegister}>
-          <Text style={{ fontSize: 14, color: 'blue', fontWeight: '500' }}>Adicionar produto</Text>
+          <Text style={{ fontSize: 14, color: 'blue', fontWeight: '500' }}>
+            Adicionar produto
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -42,7 +51,7 @@ export default function Home() {
 
       <FlatList
         style={styles.imageView}
-        keyExtractor={(item, index) => item.toString()}
+        keyExtractor={(item, index) => item.id.toString()}
         data={products}
         renderItem={({ item }) => (
           <View style={styles.containerProduct}>

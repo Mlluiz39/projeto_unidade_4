@@ -8,41 +8,44 @@ import {
   TextInput,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import api from '../services/api'
+import Axios from 'axios'
 import * as ImagePicker from 'expo-image-picker'
 
 export default function ProductRegister() {
   const [name, setName] = useState('')
-  const [code, setCode] = useState('')
+  const [code, setCode] = useState(Number)
   const [category, setCategory] = useState('')
   const [description, setDescription] = useState('')
-  const [price, setPrice] = useState('')
+  const [price, setPrice] = useState(Number)
   const [path, setPath] = useState('')
 
   const navigation = useNavigation()
 
-  function handleRegisterProduct() {
-    api.post('/products', {
+  async function handleRegisterProduct() {
+    const data = {
       name,
       code,
       category,
       description,
       price,
       path,
-    })
+    }
 
-    navigation.navigate('Home')
+    try {
+      await Axios.post('http://localhost:3000/products', data)
+      navigation.navigate('Home')
+    } catch (error) {
+     alert('Erro ao cadastrar produto')
+    }
   }
 
   async function pickImage() {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     })
-
-    console.log(result)
 
     if (!result.canceled) {
       setPath(result.assets[0].uri)
@@ -52,9 +55,13 @@ export default function ProductRegister() {
   return (
     <View style={styles.container}>
       <View style={styles.imageView}>
-        <Image style={styles.imageProduct} src={path} />
+        <Image
+          style={styles.imageProduct}
+          source={{ uri: path ? path : null }}
+        />
+
         <TouchableOpacity onPress={pickImage}>
-          <Text style={{ color: 'blue' }}>Escolher imagem</Text>
+          <Text style={{ color: 'blue', fontSize: 16 }}>Escolher imagem</Text>
         </TouchableOpacity>
       </View>
 
@@ -66,7 +73,7 @@ export default function ProductRegister() {
       <TextInput
         style={styles.textInput}
         placeholder="Código"
-        onChangeText={setName}
+        onChangeText={setCode}
       />
       <TextInput
         style={styles.textInput}
@@ -102,7 +109,7 @@ export default function ProductRegister() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 60,
+    marginTop: 30,
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -119,6 +126,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 100,
+    marginBottom: 20,
   },
   textInput: {
     fontSize: 16,

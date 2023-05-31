@@ -12,7 +12,7 @@ export function StackRoutes() {
       <Screen
         name="Home"
         options={{
-          title: 'Home',
+          title: 'Lista de Produtos',
           headerTitleAlign: 'center',
         }}
         component={Home}
@@ -20,7 +20,8 @@ export function StackRoutes() {
       <Screen
         name="Cadastrar"
         options={{
-          headerShown: false,
+          title: 'Cadastrar Produto',
+          headerTitleAlign: 'center',
         }}
         component={ProductRegister}
       />
