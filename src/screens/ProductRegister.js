@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Image,
-  Button,
   TouchableOpacity,
   TextInput,
 } from 'react-native'
@@ -18,7 +17,7 @@ export default function ProductRegister() {
   const [category, setCategory] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
-  const [image, setImage] = useState('')
+  const [path, setPath] = useState('')
 
   const navigation = useNavigation()
 
@@ -29,32 +28,32 @@ export default function ProductRegister() {
       category,
       description,
       price,
-      image,
+      path,
     })
 
     navigation.navigate('Home')
+  }
+
+  async function pickImage() {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    })
+
+    console.log(result)
+
+    if (!result.canceled) {
+      setPath(result.assets[0].uri)
     }
-
-    async function pickImage() {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      })
-
-      console.log(result)
-
-      if (!result.canceled) {
-        setImage(result.assets[0].uri)
-      }
-    }
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.imageView}>
-        <Image style={styles.imageProduct} />
-       <TouchableOpacity onPress={pickImage}>
+        <Image style={styles.imageProduct} src={path} />
+        <TouchableOpacity onPress={pickImage}>
           <Text style={{ color: 'blue' }}>Escolher imagem</Text>
         </TouchableOpacity>
       </View>
@@ -62,31 +61,26 @@ export default function ProductRegister() {
       <TextInput
         style={styles.textInput}
         placeholder="Nome do produto"
-        value={name}
         onChangeText={setName}
       />
       <TextInput
         style={styles.textInput}
         placeholder="Código"
-        value={code}
         onChangeText={setName}
       />
       <TextInput
         style={styles.textInput}
         placeholder="Categoria"
-        value={category}
         onChangeText={setCategory}
       />
       <TextInput
         style={styles.textInput}
         placeholder="Descrição"
-        value={description}
         onChangeText={setDescription}
       />
       <TextInput
         style={styles.textInput}
         placeholder="Preço"
-        value={price}
         onChangeText={setPrice}
       />
 
