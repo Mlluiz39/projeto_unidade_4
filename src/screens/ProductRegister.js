@@ -54,7 +54,9 @@ export default function ProductRegister() {
     <View style={styles.container}>
       <View style={styles.imageView}>
         <Image style={styles.imageProduct} />
-        <Button title="Escolher imagem" />
+       <TouchableOpacity onPress={pickImage}>
+          <Text style={{ color: 'blue' }}>Escolher imagem</Text>
+        </TouchableOpacity>
       </View>
 
       <TextInput
