@@ -1,27 +1,42 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   View,
   Text,
   StyleSheet,
   Image,
+  Button,
   TouchableOpacity,
   TextInput,
 } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import Axios from 'axios'
 import * as ImagePicker from 'expo-image-picker'
 
-export default function ProductRegister() {
+export default function ProductView() {
   const [name, setName] = useState('')
   const [code, setCode] = useState()
   const [category, setCategory] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState()
   const [path, setPath] = useState('')
+  const [id, setId] = useState('')
 
   const navigation = useNavigation()
+  const route = useRoute()
 
-  async function handleRegisterProduct() {
+  useEffect(() => {
+    const { product } = route.params
+
+    setName(product.name)
+    setCode(product.code.toString())
+    setCategory(product.category)
+    setDescription(product.description)
+    setPrice(product.price.toString())
+    setPath(product.path)
+    setId(product.id)
+  }, [])
+
+  async function handleEditProduct() {
     const data = {
       name,
       code,
@@ -36,7 +51,8 @@ export default function ProductRegister() {
         alert('Preencha todos os campos')
         return
       }
-      await Axios.post('http://localhost:3000/products', data)
+      await Axios.patch(`http://localhost:3000/products/${id}`, data)
+      alert('Produto editado com sucesso')
       navigation.navigate('Home')
     } catch (error) {
       alert('Erro ao cadastrar produto')
@@ -56,6 +72,17 @@ export default function ProductRegister() {
     }
   }
 
+  async function deleteProduct(id) {
+    try {
+      await Axios.delete(`http://localhost:3000/products/${id}`)
+
+      alert('Produto deletado com sucesso')
+      navigation.navigate('Home')
+    } catch (error) {
+      alert('Erro ao deletar produto')
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.imageView}>
@@ -65,39 +92,34 @@ export default function ProductRegister() {
         />
 
         <TouchableOpacity onPress={pickImage}>
-          <Text style={{ color: 'blue', fontSize: 16 }}>Escolher imagem</Text>
+          <Text style={{ color: 'blue', fontSize: 16 }}>Alterar imagem</Text>
         </TouchableOpacity>
       </View>
 
       <TextInput
         style={styles.textInput}
-        placeholder="Nome do produto"
         value={name}
-        onChangeText={setName}
+        onChangeText={text => setName(text)}
       />
       <TextInput
         style={styles.textInput}
-        placeholder="Código"
         value={code}
-        onChangeText={setCode}
+        onChangeText={text => setCode(text)}
       />
       <TextInput
         style={styles.textInput}
-        placeholder="Categoria"
         value={category}
-        onChangeText={setCategory}
+        onChangeText={text => setCategory(text)}
       />
       <TextInput
         style={styles.textInput}
-        placeholder="Descrição"
         value={description}
-        onChangeText={setDescription}
+        onChangeText={text => setDescription(text)}
       />
       <TextInput
         style={styles.textInput}
-        placeholder="Preço"
         value={price}
-        onChangeText={setPrice}
+        onChangeText={text => setPrice(text)}
       />
 
       <TouchableOpacity style={styles.buttonRegister}>
@@ -107,11 +129,17 @@ export default function ProductRegister() {
             fontSize: 16,
             textAlign: 'center',
           }}
-          onPress={handleRegisterProduct}
+          onPress={handleEditProduct}
         >
-          Cadastrar
+          Editar
         </Text>
       </TouchableOpacity>
+      <Button
+        title="Delete"
+        onPress={() => {
+          deleteProduct(id)
+        }}
+      />
     </View>
   )
 }
@@ -149,7 +177,7 @@ const styles = StyleSheet.create({
   buttonRegister: {
     marginTop: 30,
     width: '100%',
-    backgroundColor: 'green',
+    backgroundColor: 'red',
     borderRadius: 8,
     padding: 16,
   },

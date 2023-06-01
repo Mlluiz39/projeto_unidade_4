@@ -7,24 +7,30 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import axios from 'axios'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import Axios from 'axios'
 import { TextInput } from 'react-native-gesture-handler'
 
 export default function Home() {
   const [products, setProducts] = useState([])
+  const route = useRoute()
 
   useEffect(() => {
     async function loadProducts() {
-      const response = await axios.get('http://localhost:3000/products')
-      setProducts(response.data)
+      const { data } = await Axios.get('http://localhost:3000/products')
+      setProducts(data)
     }
+
     loadProducts()
-  }, [])
+  }, [route.params?.data])
 
   const navigation = useNavigation()
-  function handleNavigateToProductRegister() {
-    navigation.navigate('Cadastrar')
+
+  function filterDesc(desc) {
+    if (desc.length < 27) {
+      return desc
+    }
+    return `${desc.substring(0, 25)} ...`
   }
 
   return (
@@ -40,7 +46,7 @@ export default function Home() {
       >
         <Text style={{ fontSize: 16 }}>Controle de Estoque</Text>
 
-        <TouchableOpacity onPress={handleNavigateToProductRegister}>
+        <TouchableOpacity onPress={() => navigation.navigate('Cadastrar')}>
           <Text style={{ fontSize: 14, color: 'blue', fontWeight: '500' }}>
             Adicionar produto
           </Text>
@@ -54,7 +60,10 @@ export default function Home() {
         keyExtractor={(item, index) => item.id.toString()}
         data={products}
         renderItem={({ item }) => (
-          <View style={styles.containerProduct}>
+          <TouchableOpacity
+            style={styles.containerProduct}
+            onPress={() => navigation.navigate('Editar', { product: item })}
+          >
             <Image
               style={{ width: 100, height: 100, margin: 10 }}
               source={{ uri: item.path ? item.path : null }}
@@ -63,10 +72,13 @@ export default function Home() {
               <Text style={styles.txtTitle}>{item.name}</Text>
               <Text style={styles.txtInput}>Código produto: {item.code}</Text>
               <Text style={styles.txtInput}>Categoria: {item.category}</Text>
-              <Text style={styles.txtInput}>Descrição: {item.description}</Text>
+              <Text style={styles.txtInput}>
+                Descrição: {filterDesc(item.description)}
+              </Text>
               <Text style={styles.txtInput}>Preço: R$ {item.price}</Text>
             </View>
-          </View>
+            <View style={{ flexDirection: 'column' }}></View>
+          </TouchableOpacity>
         )}
       />
     </View>

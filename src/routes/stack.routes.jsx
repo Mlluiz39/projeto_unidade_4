@@ -5,6 +5,7 @@ const { Navigator, Screen } = createStackNavigator()
 
 import Home from '../screens/Home'
 import ProductRegister from '../screens/ProductRegister'
+import ProductView from '../screens/ProductView'
 
 export function StackRoutes() {
   return (
@@ -24,6 +25,14 @@ export function StackRoutes() {
           headerTitleAlign: 'center',
         }}
         component={ProductRegister}
+      />
+      <Screen
+        name="Editar"
+        options={{
+          title: 'Editar Produto',
+          headerTitleAlign: 'center',
+        }}
+        component={ProductView}
       />
     </Navigator>
   )
